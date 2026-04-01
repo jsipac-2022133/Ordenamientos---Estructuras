@@ -2,7 +2,10 @@ import java.util.Scanner;
 
 public class Main {
 
+    static final String NOMBRE_ARCHIVO = "datos.txt";
+
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
         boolean salir = false;
 
@@ -16,34 +19,144 @@ public class Main {
             System.out.println("4. Ordenar con Quick Sort");
             System.out.println("5. Ordenar con Radix Sort");
             System.out.println("6. Ordenar con Shell Sort");
-            System.out.println("7. Salir");
+            System.out.println("7. Medir tiempos de todos los algoritmos (Profiler)");
+            System.out.println("8. Salir");
             System.out.print("Elige una opcion: ");
 
             int opcion = scanner.nextInt();
 
             switch (opcion) {
+
                 case 1:
-                    System.out.println("Opcion 1 seleccionada (pendiente de implementar)");
+                    System.out.print("Cuantos numeros deseas generar? (maximo 3000): ");
+                    int cantidad = scanner.nextInt();
+                    FileManager.generarNumeros(NOMBRE_ARCHIVO, cantidad);
                     break;
-                case 2:
-                    System.out.println("Opcion 2 seleccionada (pendiente de implementar)");
+
+                case 2: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+                    System.out.print("Primeros 10 numeros ANTES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+
+                    Profiler profiler = new Profiler();
+                    profiler.iniciar();
+                    SortAlgorithms.gnomeSort(datos);
+                    profiler.detener();
+
+                    System.out.print("Primeros 10 numeros DESPUES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+                    profiler.imprimirResultado("Gnome Sort", datos.length);
                     break;
-                case 3:
-                    System.out.println("Opcion 3 seleccionada (pendiente de implementar)");
+                }
+
+                case 3: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+                    System.out.print("Primeros 10 numeros ANTES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+
+                    Profiler profiler = new Profiler();
+                    profiler.iniciar();
+                    SortAlgorithms.mergeSort(datos, 0, datos.length - 1);
+                    profiler.detener();
+
+                    System.out.print("Primeros 10 numeros DESPUES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+                    profiler.imprimirResultado("Merge Sort", datos.length);
                     break;
-                case 4:
-                    System.out.println("Opcion 4 seleccionada (pendiente de implementar)");
+                }
+
+                case 4: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+                    System.out.print("Primeros 10 numeros ANTES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+
+                    Profiler profiler = new Profiler();
+                    profiler.iniciar();
+                    SortAlgorithms.quickSort(datos, 0, datos.length - 1);
+                    profiler.detener();
+
+                    System.out.print("Primeros 10 numeros DESPUES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+                    profiler.imprimirResultado("Quick Sort", datos.length);
                     break;
-                case 5:
-                    System.out.println("Opcion 5 seleccionada (pendiente de implementar)");
+                }
+
+                case 5: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+                    System.out.print("Primeros 10 numeros ANTES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+
+                    Profiler profiler = new Profiler();
+                    profiler.iniciar();
+                    SortAlgorithms.radixSort(datos);
+                    profiler.detener();
+
+                    System.out.print("Primeros 10 numeros DESPUES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+                    profiler.imprimirResultado("Radix Sort", datos.length);
                     break;
-                case 6:
-                    System.out.println("Opcion 6 seleccionada (pendiente de implementar)");
+                }
+
+                case 6: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+                    System.out.print("Primeros 10 numeros ANTES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+
+                    Profiler profiler = new Profiler();
+                    profiler.iniciar();
+                    SortAlgorithms.shellSort(datos);
+                    profiler.detener();
+
+                    System.out.print("Primeros 10 numeros DESPUES de ordenar: ");
+                    FileManager.imprimirArreglo(datos, 10);
+                    profiler.imprimirResultado("Shell Sort", datos.length);
                     break;
-                case 7:
+                }
+
+                case 7: {
+                    Integer[] datos = FileManager.leerNumeros(NOMBRE_ARCHIVO);
+                    if (datos.length == 0) {
+                        System.out.println("Primero genera los numeros (opcion 1).");
+                        break;
+                    }
+
+                    // Primera corrida: datos DESORDENADOS (tal como se leen del archivo)
+                    Profiler.medirTiemposEnIntervalos(datos, false);
+
+                    // Ordenamos el arreglo para la segunda corrida
+                    Integer[] datosOrdenados = FileManager.copiarArreglo(datos);
+                    SortAlgorithms.mergeSort(datosOrdenados, 0, datosOrdenados.length - 1);
+
+                    // Segunda corrida: datos YA ORDENADOS
+                    Profiler.medirTiemposEnIntervalos(datosOrdenados, true);
+                    break;
+                }
+
+                case 8:
                     salir = true;
                     System.out.println("Hasta luego!");
                     break;
+
                 default:
                     System.out.println("Opcion no valida, intenta de nuevo.");
             }
