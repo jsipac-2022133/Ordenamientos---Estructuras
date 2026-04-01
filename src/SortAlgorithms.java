@@ -75,4 +75,113 @@ public class SortAlgorithms {
             k++;
         }
     }
+
+    // QUICK SORT
+    public static <T extends Comparable<T>> void quickSort(T[] arreglo, int inicio, int fin) {
+
+        if (inicio < fin) {
+            int indicePivot = particionar(arreglo, inicio, fin);
+
+            quickSort(arreglo, inicio, indicePivot - 1);
+
+            quickSort(arreglo, indicePivot + 1, fin);
+        }
+    }
+
+    // Metodo auxiliar: coloca el pivot en su posicion correcta
+    private static <T extends Comparable<T>> int particionar(T[] arreglo, int inicio, int fin) {
+
+        T pivot = arreglo[fin];
+        int i = inicio - 1;
+
+        for (int j = inicio; j < fin; j++) {
+            if (arreglo[j].compareTo(pivot) <= 0) {
+                i++;
+                T temporal = arreglo[i];
+                arreglo[i] = arreglo[j];
+                arreglo[j] = temporal;
+            }
+        }
+
+        T temporal = arreglo[i + 1];
+        arreglo[i + 1] = arreglo[fin];
+        arreglo[fin] = temporal;
+
+        return i + 1;
+    }
+
+    // RADIX SORT
+    public static void radixSort(Integer[] arreglo) {
+
+        if (arreglo.length == 0)
+            return;
+
+        int maximo = arreglo[0];
+        for (int i = 1; i < arreglo.length; i++) {
+            if (arreglo[i] > maximo) {
+                maximo = arreglo[i];
+            }
+        }
+
+        for (int exp = 1; maximo / exp > 0; exp *= 10) {
+            conteoSort(arreglo, exp);
+        }
+    }
+
+    // Metodo auxiliar: ordena segun el digito en posicion exp
+    private static void conteoSort(Integer[] arreglo, int exp) {
+
+        int n = arreglo.length;
+        Integer[] resultado = new Integer[n];
+        int[] conteo = new int[10];
+
+        for (int i = 0; i < 10; i++) {
+            conteo[i] = 0;
+        }
+
+        for (int i = 0; i < n; i++) {
+            int digito = (arreglo[i] / exp) % 10;
+            conteo[digito]++;
+        }
+
+        for (int i = 1; i < 10; i++) {
+            conteo[i] += conteo[i - 1];
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            int digito = (arreglo[i] / exp) % 10;
+            resultado[conteo[digito] - 1] = arreglo[i];
+            conteo[digito]--;
+        }
+
+        for (int i = 0; i < n; i++) {
+            arreglo[i] = resultado[i];
+        }
+    }
+
+    // SHELL SORT
+    public static <T extends Comparable<T>> void shellSort(T[] arreglo) {
+
+        int n = arreglo.length;
+
+        int gap = n / 2;
+
+        while (gap > 0) {
+
+            for (int i = gap; i < n; i++) {
+                T temporal = arreglo[i];
+                int j = i;
+
+                while (j >= gap && arreglo[j - gap].compareTo(temporal) > 0) {
+                    arreglo[j] = arreglo[j - gap];
+                    j -= gap;
+                }
+
+                arreglo[j] = temporal;
+            }
+
+            gap = gap / 2;
+        }
+    }
+
 }
